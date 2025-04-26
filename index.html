@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>coblerbob.com</title>
+    <link rel="stylesheet" href="style.css">
+    <a href="http://127.0.0.1:5500/index.html"></a>
+</head>
+<body> 
+    <label id="InputLabel">Guess the number 1 - 500 win a prize!</label><br>
+    <p id="IncorrectText"></p>
+    
+
+
+    <div id="InputContainer" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+        <input type="number" id="UserGuess" class="Input"/>
+    </div><br>
+    
+    <div id="containBtn">
+        <label id="disabledText"></label>
+        <button id="GuessBtn" class="button">Guess</button>
+        <button id="HintBtn" class="button">Hint 0/2</button>
+    </div>
+    
+    <div id="PaymentBtns">
+        
+        <button id="MoreHintsBtn" class="button">More Hints $1.00 (one time)</button>
+        <button id="MoreAttemptsBtn" class="button">More attempts $1.25 for 5 (one time)</button>
+    </div>
+
+    <script>const InputLabel = document.getElementById("InputLabel");
+const IncorrectText = document.getElementById("IncorrectText");
+const disabledText = document.getElementById("disabledText");
+const Guess = document.getElementById("UserGuess");
+const GuessBtn = document.getElementById("GuessBtn");
+const HintBtn = document.getElementById("HintBtn");
+const MoreHintsBtn = document.getElementById("MoreHintsBtn");
+const MoreAttemptsBtn = document.getElementById("MoreAttemptsBtn");
+let NumMin = 1
+let NumMax = 500
+let Answer = Math.floor(Math.random() * NumMax - NumMin + 1) + NumMin;
+let Attempts = 0;
+console.log(Answer);
+
+
+
+MoreAttemptsBtn.onclick = function(){
+    let Bought_More_Attempts = document.location.href="https://buy.stripe.com/test_bIY4gx2FN44m05abIJ";
+}
+
+
+
+MoreHintsBtn.onclick = function(){
+    let Bought_More_Hints = document.location.href="https://buy.stripe.com/test_00gcN3fsz1We5pudQQ";
+
+}  
+
+
+HintBtn.onclick = function(){
+    if(HintBtn.textContent === "Hint 1/2" && parseInt(Guess.value) > Answer){
+        HintBtn.textContent = "No hints left";
+        window.alert("Hint #2: Your last guess was higher than the number.");
+        window.alert("You have 0 hint remaining.");
+            
+    } else if(HintBtn.textContent === "Hint 1/2" && parseInt(Guess.value) < Answer){
+      HintBtn.textContent = "No hints left";
+      window.alert("Hint #2: Your last guess was lower than the number.");
+      window.alert("You have 0 hints remaining.");
+    
+    } else if(HintBtn.textContent === "Hint 0/2" && parseInt(Guess.value) > Answer){
+      HintBtn.textContent = "Hint 1/2";
+      window.alert("Hint #1: Your last guess was higher than the number.");
+      window.alert("You have 1 hint remaining.");
+            
+    } else if(HintBtn.textContent === "Hint 0/2" && parseInt(Guess.value) < Answer){
+      HintBtn.textContent = "Hint 1/2";
+      window.alert("Hint #1: Your last guess was lower than the number.");
+      window.alert("You have 1 hint remaining.");
+    
+    } else if(HintBtn.textContent === "No hints left"){
+      window.alert("You have no hints left!")
+    }
+
+    
+}
+
+
+GuessBtn.onclick = function(){
+    if(Guess.value == Answer){
+        InputLabel.textContent = `You guessed the number!!!`;
+        IncorrectText.textContent = ``;
+        
+    }   
+
+    else{
+        IncorrectText.textContent = `Incorrect try again`;
+        Attempts+=1;
+        if(Attempts == 5){
+            document.getElementById("GuessBtn").disabled = true;
+            window.alert("Must buy more attempts");
+            disabledText.textContent = "Button disabled must buy more attempts";
+            if(Bought_More_Attempts == "https://buy.stripe.com/test_bIY4gx2FN44m05abIJ"){
+                window.alert("Success");
+                document.getElementById("GuessBtn").disabled = false;
+                disabledText.textContent = "";
+            }
+        }    
+        
+    }
+      
+}
+
+
+   </script><br>
+    <img src="https://media.licdn.com/dms/image/D4E12AQFnVG7jswiy_w/article-cover_image-shrink_720_1280/0/1677811002897?e=2147483647&v=beta&t=PsdBb0XNaRjFynZGqW-uv8AsrmM8i3z0huXaRD0Z6Vk" width="2700" height="1500" alt="wall of gift cards">
+    <script src="index.js"></script>
+</body>
+</html>
+
+
