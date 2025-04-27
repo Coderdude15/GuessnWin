@@ -41,9 +41,55 @@ let NumMin = 1
 let NumMax = 500
 let Answer = Math.floor(Math.random() * NumMax - NumMin + 1) + NumMin;
 let Attempts = 0;
-console.log(Answer);
+
+success_url: "http://localhost:5500/index.html?boughtAttempts=true"
+success_url2: "http://localhost:5500/index.html?boughtHints=true"
 
 
+const Params2 = new URLSearchParams(window.location.search);
+
+// Check if user bought more attempts
+if (params.get("boughtAttempts") === "true") {
+    localStorage.removeItem("lockoutTime");
+    disabledText.textContent = "";
+    GuessBtn.disabled = false;
+    Attempts = 0;
+}
+
+// Check if user is locked out
+const lockoutTime = localStorage.getItem("lockoutTime");
+if (lockoutTime) {
+    const lockoutDate = new Date(parseInt(lockoutTime));
+    const now = new Date();
+
+    const timeDiff = now.getTime() - lockoutDate.getTime();
+    const twoDays = 2 * 24 * 60 * 60 * 1000;
+
+    if (timeDiff < twoDays) {
+        GuessBtn.disabled = true;
+        disabledText.textContent = "You must wait 2 days or buy more attempts.";
+    } else {
+        // Time passed, unlock
+        localStorage.removeItem("lockoutTime");
+        GuessBtn.disabled = false;
+        disabledText.textContent = "";
+    }
+}
+
+
+
+const Params = new URLSearchParams(window.location.search);
+if (params.get("boughtHints") === "true") {
+    window.alert("success you bought more hints");
+    HintBtn.textContent = "Hint 0/2";
+}
+
+const params = new URLSearchParams(window.location.search);
+if (params.get("boughtAttempts") === "true") {
+    disabledText.textContent = "";
+    GuessBtn.disabled = false;
+    Attempts = 0;
+}
 
 MoreAttemptsBtn.onclick = function(){
     let Bought_More_Attempts = document.location.href="https://buy.stripe.com/test_bIY4gx2FN44m05abIJ";
@@ -54,7 +100,9 @@ MoreAttemptsBtn.onclick = function(){
 MoreHintsBtn.onclick = function(){
     let Bought_More_Hints = document.location.href="https://buy.stripe.com/test_00gcN3fsz1We5pudQQ";
 
-}  
+};
+
+
 
 
 HintBtn.onclick = function(){
@@ -100,16 +148,13 @@ GuessBtn.onclick = function(){
             document.getElementById("GuessBtn").disabled = true;
             window.alert("Must buy more attempts");
             disabledText.textContent = "Button disabled must buy more attempts";
-            if(Bought_More_Attempts == "https://buy.stripe.com/test_bIY4gx2FN44m05abIJ"){
-                window.alert("Success");
-                document.getElementById("GuessBtn").disabled = false;
-                disabledText.textContent = "";
+            localStorage.setItem("lockoutTime", Date.now().toString());
             }
         }    
         
     }
       
-}
+
 
 
    </script><br>
