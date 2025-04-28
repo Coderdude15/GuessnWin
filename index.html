@@ -120,19 +120,6 @@ if (lockoutTime) {
 
 
 
-const Params = new URLSearchParams(window.location.search);
-if (Params.get("boughtHints") === "true") {
-    window.alert("success you bought more hints");
-    HintBtn.textContent = "Hint 0/2";
-}
-
-const params = new URLSearchParams(window.location.search);
-if (params.get("boughtAttempts") === "true") {
-    disabledText.textContent = "";
-    GuessBtn.disabled = false;
-    Attempts = 0;
-}
-
 MoreAttemptsBtn.onclick = function(){
     let Bought_More_Attempts = document.location.href="https://buy.stripe.com/test_00gbIZ2FNbwO8BG7su";
 }
@@ -180,20 +167,26 @@ HintBtn.onclick = function(){
 const tosCheckbox = document.getElementById("tosCheckbox");
 const tosContainer = document.getElementById("CheckboxContainer");
 
-GuessBtn.disabled = true;
-window.alert("You must agree to the terms of service before play.");
-disabledText.textContent = "Must agree to terms of service."
+if (localStorage.getItem("tosAgreed") === "true") {
+    GuessBtn.disabled = false;
+    disabledText.textContent = "";
+    tosCheckbox.style.display = "none";
+    CheckboxLabel.textContent = "";
+} else {
+    GuessBtn.disabled = true;
+    window.alert("You must agree to the terms of service before play.");
+    disabledText.textContent = "Must agree to terms of service.";
+}
 
 tosCheckbox.onchange = function () {
-    GuessBtn.disabled = !tosCheckbox.checked;
-    disabledText.textContent = "";
-
     if (tosCheckbox.checked) {
+        localStorage.setItem("tosAgreed", "true");
+        GuessBtn.disabled = false;
+        disabledText.textContent = "";
         tosCheckbox.style.display = "none";
         CheckboxLabel.textContent = "";
-        
     }
-}
+};
 
 GuessBtn.onclick = function(){
     if(Guess.value == Answer){
